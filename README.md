@@ -1,16 +1,18 @@
-# PAYMENT GATEWAY WITH DJANGO REST FRAMEWORK
+# CALENDAR EVENTS WITH DJANGO REST FRAMEWORK
 [Django REST framework](http://www.django-rest-framework.org/) is a powerful and flexible toolkit for building Web APIs.
 
 ## Requirements
 - Python 3.9.6
-- Django 4.1.5
-- Django REST Framework 3.14.0
+- Django 4.0.6
+- Django REST Framework 3.13.1
+- Google Auth 2.9.1
+- Google API Python client 2.53.0
 
 ## Quick Start
 
 - Fork and Clone the repository using-
 ```
-git clone https://github.com/SakshamTolani/payment-gateway
+git clone https://github.com/SakshamTolani/django-oauth
 ```
 - Create a Branch- 
 ```
@@ -51,6 +53,12 @@ python manage.py migrate
 ```
 python manage.py createsuperuser
 ```
+- Create a project on https://console.google.com/ and fill up the required details related to OAuth Consent Screen and for Credentils.
+- Download or copy .json file of credentials and paste it in the "credentials.json" file located in 
+```
+backend / base / credentials.json
+```
+
 - Run server using-
 ```
 python manage.py runserver
@@ -59,31 +67,21 @@ python manage.py runserver
 ## Structure
 In a RESTful API, endpoints (URLs) define the structure of the API and how end users access data from our application using the HTTP methods - GET, POST, PUT, DELETE. Endpoints should be logically organized around _collections_ and _elements_, both of which are resources.
 
-In our case, we have one single resource, `orders`, so we will use the following URLS - `/api/` and `/api/<order_id>` for collections and elements, respectively:
+In our case, we have one single resource, `calendar`, so we will use the following URLS - `/rest/calendar/v1/init` and `/rest/calendar/v1/redirect` for collections and elements, respectively:
 
 Endpoint |HTTP Method | CRUD Method | Result
 -- | -- |-- |--
-`api/` | GET | READ | Get all orders
-`api/:order_id/` | GET | READ | Get order by order-id
-`api/createOrder/`| POST | CREATE | Create a new order
-`api/:order_id/paymentStatus/` | GET | READ | Get Payment Details by order-id
-`api/:order_id/paymentStatus/success/` | PUT | UPDATE | Update payment to success using order-id
-`api/:order_id/paymentStatus/failure/` | PUT | UPDATE | Update payment to failure using order-id
+`/rest/calendar/v1/init` | GET | READ | Initializes OAuth by asking user their credentials
+`/rest/calendar/v1/redirect` | GET | READ | Handles redirect request for above url and get all the events through user's calendar. 
 
 ### Commands
 ```
-Get all orders
-http http://127.0.0.1:8000/api/
-Get order by order-id
-http GET http://127.0.0.1:8000/api/{order_id}/
-Create a new order
-http POST http://127.0.0.1:8000/api/createOrder/ "order_id":"ORD265", "order_amount":2000, "customer_name":"Spiderman"
-Get Payment Details by order-id
-http GET http://127.0.0.1:8000/api/{order_id}/paymentStatus/ 
-Update payment to success using order-id
-http PUT http://127.0.0.1:8000/api/{order_id}/paymentStatus/success/
-Update payment to failure using order-id
-http PUT http://127.0.0.1:8000/api/{order_id}/paymentStatus/failure/ 
+Authorize your google account
+http http://127.0.0.1:8000/rest/calendar/v1/init/
+
+Redirected to this page which has events for user
+http GET http://127.0.0.1:8000/rest/calendar/v1/redirect/
+
 ```
 
 > Made with ❤️ by Saksham Tolani
